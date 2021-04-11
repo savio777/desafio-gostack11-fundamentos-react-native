@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
 import { View, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import formatValue from '../../utils/formatValue';
 import { useCart } from '../../hooks/cart';
@@ -29,6 +30,8 @@ interface Product {
 }
 
 const Dashboard: React.FC = () => {
+  const navigation = useNavigation();
+
   const { addToCart } = useCart();
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -49,6 +52,10 @@ const Dashboard: React.FC = () => {
 
   function handleAddToCart(item: Product): void {
     addToCart(item);
+  }
+
+  function navigateToCard(): void {
+    navigation.navigate('Cart');
   }
 
   return (
@@ -78,7 +85,7 @@ const Dashboard: React.FC = () => {
           )}
         />
       </ProductContainer>
-      <FloatingCart />
+      <FloatingCart navigateToCard={navigateToCard} />
     </Container>
   );
 };
