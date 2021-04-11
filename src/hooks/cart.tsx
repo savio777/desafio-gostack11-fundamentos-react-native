@@ -30,15 +30,35 @@ const CartProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     async function loadProducts(): Promise<void> {
-      // TODO LOAD ITEMS FROM ASYNC STORAGE
+      const getProducts = await AsyncStorage.getItem('GoMarketplace:products');
+
+      if (getProducts) setProducts(JSON.parse(getProducts));
     }
 
     loadProducts();
   }, []);
 
-  const addToCart = useCallback(async product => {
-    // TODO ADD A NEW ITEM TO THE CART
-  }, []);
+  const addToCart = useCallback(
+    async product => {
+      const productExist = products.findIndex(p => p.id === product.id);
+
+      if (productExist > -1) {
+        const productsTemp = [...products];
+
+        productsTemp[productExist].quantity += 1;
+
+        setProducts(productsTemp);
+      } else {
+        setProducts([...products, { ...product, quantity: 1 }]);
+      }
+
+      await AsyncStorage.setItem(
+        'GoMarketplace:products',
+        JSON.stringify(products),
+      );
+    },
+    [products],
+  );
 
   const increment = useCallback(async id => {
     // TODO INCREMENTS A PRODUCT QUANTITY IN THE CART

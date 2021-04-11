@@ -38,8 +38,6 @@ const Dashboard: React.FC = () => {
       try {
         const response = await api.get('products');
 
-        console.log(response.data);
-
         setProducts(response.data);
       } catch (error) {
         console.log(error);
@@ -50,7 +48,7 @@ const Dashboard: React.FC = () => {
   }, []);
 
   function handleAddToCart(item: Product): void {
-    // TODO
+    addToCart(item);
   }
 
   return (
